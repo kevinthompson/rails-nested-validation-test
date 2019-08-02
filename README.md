@@ -2,9 +2,9 @@
 
 It was discovered that when you have two objects that are related through a
 `has_many` relationship and the parent object `accepts_nested_attributes` for
-the child object, if any of the associated child objects are not valid, but the
-last associated child object is valid and it checks the validity of the parent
-object, the parent objects validity returns true when it should return false.
+the child object, if **any of the associated child objects are not valid**, but the
+**last associated child object is valid** and it **checks the validity of the parent
+object**, the parent objects validity returns true when it should return false.
 
 ## Code
 
