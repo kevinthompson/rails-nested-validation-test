@@ -1,24 +1,47 @@
-# README
+```ruby
+class Parent < ApplicationRecord
+  has_many :children
+  accepts_nested_attributes_for :children
+end
+```
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+```ruby
+class Child < ApplicationRecord
+  belongs_to :parent
+  validates :name, presence: true
+  validate -> { errors.add(:base, 'Parent is invalid') unless parent.valid? }
+end
+```
 
-Things you may want to cover:
+```ruby
+class ParentTest < ActiveSupport::TestCase
+  test "invalid when nested object is invalid" do
+    parent = Parent.new(children_attributes: [{}, { name: 'Second Child'}])
+    assert_equal false, parent.children.first.valid?
+    assert_equal false, parent.valid?
+  end
+end
+```
 
-* Ruby version
+```sh
+rails-nested-validation-test (master) $ bin/rake
+Running via Spring preloader in process 10560
+Run options: --seed 29533
 
-* System dependencies
+# Running:
 
-* Configuration
+F
 
-* Database creation
+Failure:
+ParentTest#test_invalid_when_nested_object_is_invalid [/Users/kevinthompson/Code/rails-nested-validation-test/test/models/parent_test.rb:7]:
+Expected: false
+  Actual: true
 
-* Database initialization
 
-* How to run the test suite
+bin/rails test test/models/parent_test.rb:4
 
-* Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
 
-* ...
+Finished in 0.054285s, 18.4213 runs/s, 36.8426 assertions/s.
+1 runs, 2 assertions, 1 failures, 0 errors, 0 skips
+```
