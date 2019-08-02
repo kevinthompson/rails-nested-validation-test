@@ -1,3 +1,13 @@
+## Issue
+
+It was discovered that when you have two objects that are related through a
+`has_many` relationship and the parent object `accepts_nested_attributes` for
+the child object, if the child object is not valid and it checks the validity of
+the parent object, the parent objects validity returns true when it should
+return false.
+
+## Code
+
 ```ruby
 class Parent < ApplicationRecord
   has_many :children
